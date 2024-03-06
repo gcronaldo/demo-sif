@@ -1,4 +1,4 @@
-# domainbadge-apex
+# Domain Badge - Apex
 
 The Salesforce used solution to solve the domain badge apex. 
 
