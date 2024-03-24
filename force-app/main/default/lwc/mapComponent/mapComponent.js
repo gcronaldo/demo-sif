@@ -31,4 +31,9 @@ export default class MapComponent extends LightningElement {
             return [];
         }
     }
+
+    mapOptions = {
+        draggable: false,
+        disableDefaultUI: true,
+    };
 }
