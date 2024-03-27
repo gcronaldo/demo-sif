@@ -1,6 +1,9 @@
 <template>
     <lightning-card title="Locations Business">
-        <lightning-button slot="actions" label="Generate Client Plan" onclick={generatePDF}></lightning-button>
+        <lightning-button 
+            slot="actions" 
+            label="Generate Client Plan" 
+            onclick={generatePDF}></lightning-button>
         <lightning-map 
             map-markers={mapMarkers} 
             list-view="auto"
