@@ -68,7 +68,6 @@ export default class MapComponent extends LightningElement {
     }
 
     callApexMethod(pdfData) {
-        console.log('Enter callApexMethod--> '+pdfData)
         saveFile({ base64: pdfData, parentId: this.recordId, fileName: 'Test.pdf' })
             .then(() => {
                 console.log('File saved successfully.');
