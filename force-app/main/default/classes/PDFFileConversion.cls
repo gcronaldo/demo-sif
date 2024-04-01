@@ -9,7 +9,7 @@ public with sharing class PDFFileConversion {
         contentVersion.IsMajorVersion = true;
         insert contentVersion;
 
-        Id contentDocumentId = [SELECT ContentDocumentId FROM ContentVersion WHERE Id = :contentVersion.Id].ContentDocumentId;
+        Id contentDocumentId = [SELECT ContentDocumentId FROM ContentVersion WHERE Id =: contentVersion.Id].ContentDocumentId;
 
         ContentDocumentLink cdl = new ContentDocumentLink();
         cdl.ContentDocumentId = contentDocumentId;

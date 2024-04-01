@@ -3,6 +3,7 @@ import { getRecord, getFieldValue } from 'lightning/uiRecordApi';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import { loadScript } from 'lightning/platformResourceLoader';
 import jspdf from '@salesforce/resourceUrl/jspdf';
+import html2canvas from '@salesforce/resourceUrl/html2canvas';
 import saveFile from '@salesforce/apex/PDFFileConversion.saveFile';
 
 import NAME_FIELD from "@salesforce/schema/Account.Name";
@@ -24,6 +25,7 @@ export default class MapComponent extends LightningElement {
                 .catch(error => {
                     console.error('Error loading jsPDF:', error);
                 });
+            loadScript(this, html2canvas);
         }
     }
 

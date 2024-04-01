@@ -4,11 +4,14 @@
             slot="actions" 
             label="Generate Client Plan" 
             onclick={generatePDF}></lightning-button>
-        <lightning-map 
+        <div class="img-lwc-map">
+            <lightning-map 
             map-markers={mapMarkers} 
             list-view="auto"
             options={mapOptions}
             markers-title="Locations"
             lightning-map-ref></lightning-map>
+        </div>
+        
     </lightning-card>
 </template>
