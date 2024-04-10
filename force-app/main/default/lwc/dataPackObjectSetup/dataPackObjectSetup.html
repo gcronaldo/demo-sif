@@ -1,14 +1,15 @@
 <template>
-    <template if:false={gotoObjectSetup}>
-        <c-data-pack-creation ondatapackcreation={handleNextStep}></c-data-pack-creation>
+    <template lwc:if={gotoSummary}>
+        <c-data-pack-summary></c-data-pack-summary>
     </template>
-    <template if:true={gotoObjectSetup}>
+    <template lwc:elseif={gotoObjectSetup}>
         <lightning-card title="Data Pack Setup" icon-name="doctype:pack">
             <div class="slds-grid slds-wrap slds-box slds-m-horizontal_xx-small">
                 <div class="slfds-col slds-size_3-of-4 slds-border_right">
                     <c-data-Pack-Object onobjectdata={handleObjectData} 
                                         selected-object={selectedObject}
-                                        object-list-updated={objectListUpdated}>
+                                        object-list-updated={objectListUpdated}
+                                        ongotosummary={handleGotoSummary}>
                     </c-data-Pack-Object>
                 </div>
                 <div class="slfds-col slds-size_1-of-4">
@@ -20,7 +21,7 @@
             </div>
         </lightning-card>
     </template>
-    <template if:true={gotoSummary}>
-         <c-data-pack-summary></c-data-pack-summary>
+    <template lwc:else>
+        <c-data-pack-creation ondatapackcreation={handleNextStep}></c-data-pack-creation>
     </template>
 </template>

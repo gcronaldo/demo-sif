@@ -186,8 +186,12 @@ export default class DataPackObject extends LightningElement {
 
     nextStep() {
         var data = {
-            objectList: this.objectList
+            objectList: this.objectList,
+            gotoSummary: true
         }
+        console.log('Value data ---> '+data);
+        const event = new CustomEvent('gotosummary', { detail: data });
+        this.dispatchEvent(event);
     }
 
 }
