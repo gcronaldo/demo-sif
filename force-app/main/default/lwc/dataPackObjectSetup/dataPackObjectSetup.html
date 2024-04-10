@@ -1,6 +1,6 @@
 <template>
     <template lwc:if={gotoSummary}>
-        <c-data-pack-summary></c-data-pack-summary>
+        <c-data-pack-summary objects={objectListUpdated}></c-data-pack-summary>
     </template>
     <template lwc:elseif={gotoObjectSetup}>
         <lightning-card title="Data Pack Setup" icon-name="doctype:pack">

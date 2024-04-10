@@ -41,9 +41,9 @@ export default class DataPackObjectSetup extends LightningElement {
 
     handleGotoSummary(event) {
         console.log('Enter handleGotoSummary --> '+JSON.stringify(event));
-        console.log('Enter gotoSummary --> '+JSON.stringify(event.detail.gotoSummary));
         const dataObject = event.detail;
         this.gotoSummary = dataObject.gotoSummary;   
+        this.objectListUpdated = dataObject.objectList;
     }
 
 }

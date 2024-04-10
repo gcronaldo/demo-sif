@@ -1,5 +1,53 @@
 <template>
-    <lightning-layout title="Data Pack Summary" icon-name="doctype:pack">
-        <div>Test</div>
-    </lightning-layout>
+    <lightning-card title="Data Pack Summary" icon-name="doctype:pack">
+        <lightning-layout multiple-rows="true" class="slds-m-left_small">
+            <lightning-layout-item size="12">
+                <lightning-layout vertical-align="center">
+                    <lightning-layout-item padding="around-small">
+                        <p>Package: </p>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small">
+                        <p>Frequency: </p>
+                    </lightning-layout-item>
+                    <lightning-layout-item padding="around-small">
+                        <p>Schedule: </p>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </lightning-layout-item>
+            <lightning-layout-item size="12">
+                <lightning-layout vertical-align="center">
+                    <template if:true={objects}>
+                        <ul>
+                            <template for:each={objects} for:item="obj">
+                                <li key={obj.objectName} >
+                                    <lightning-accordion active-section-name={obj.objectName}
+                                                         allow-multiple-sections-open
+                                                         onsectiontoggle={handleToggleSection}>
+                                    <lightning-accordion-section name={obj.objectName} label={obj.objectName}>
+                                        <p>Object: {obj.objectName}</p>
+                                        <p>Execution Order: {obj.executionOrder}</p>
+                                        <template lwc:if={obj.replicationSelected}>
+                                            <lightning-card title="Replication Info">
+                                                <p>Query Conditional: {obj.queryConditional}</p>
+                                                <p>Bucket Name: {obj.bucketName}</p>
+                                                <p>Screen Size Load: {obj.screenSizeLoad}</p>
+                                                <p>Path: {obj.path}</p>
+                                            </lightning-card>
+                                        </template>
+                                        <template lwc:if={obj.purgeSelected}>
+                                            <lightning-card title="Purge Info">
+                                                <p>batchSize: {obj.batchSize}</p>
+                                                <p>Query Conditional: {obj.queryConditionalPurge}</p>
+                                            </lightning-card>
+                                        </template>
+                                    </lightning-accordion-section>
+                                </lightning-accordion>
+                                </li>
+                            </template>
+                        </ul>
+                    </template>
+                </lightning-layout>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
 </template>
