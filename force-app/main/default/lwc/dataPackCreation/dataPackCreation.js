@@ -1,4 +1,5 @@
 import { LightningElement } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class DataPackCreation extends LightningElement {
 
@@ -6,7 +7,6 @@ export default class DataPackCreation extends LightningElement {
     packageActive;
     frequency;
     shedule;
-    initialSetup = true;
 
     get frequencyOptions() {
         return [
@@ -32,11 +32,40 @@ export default class DataPackCreation extends LightningElement {
         this.shedule = event.detail.value;
     }
 
+    validateInputs() {
+        return (
+            this.packName &&
+            this.frequency &&
+            this.shedule
+        );
+    }
+
     nextStep() {
         console.log('Enter nextStep');
-        this.initialSetup = false;
-        const event = new CustomEvent('datapackcreation', { detail: this.initialSetup });
-        this.dispatchEvent(event);
+        if(this.validateInputs()){
+            const packData = {
+                packName: this.packName,
+                packageActive: this.packageActive,
+                frequency: this.frequency,
+                shedule: this.shedule,
+                gotoNextStep: true
+            };
+            const event = new CustomEvent('datapackcreation', { detail: packData });
+            this.dispatchEvent(event);
+        } 
+        else {
+             this.showToast('Required Fields', 'Please enter values for all required fields.', 'warning');
+        }
+        
+    }
+
+    showToast(title, message, variant) {
+        const toastEvent = new ShowToastEvent({
+             title: title,
+             message: message,
+             variant: variant
+        });
+        this.dispatchEvent(toastEvent);
     }
 
 }

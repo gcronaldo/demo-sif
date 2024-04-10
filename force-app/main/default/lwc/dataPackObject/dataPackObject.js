@@ -1,8 +1,7 @@
 import { LightningElement, api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { OmniscriptBaseMixin } from 'vlocity_cmt/omniscriptBaseMixin';
 
-export default class DataPackObject extends OmniscriptBaseMixin(LightningElement) {
+export default class DataPackObject extends LightningElement {
     replicationSelected;
     purgeSelected;
     executionOrder;
@@ -109,7 +108,7 @@ export default class DataPackObject extends OmniscriptBaseMixin(LightningElement
     }
 
     addObject() {
-        
+
         // Check if objectName is set. 
         if(!this.objectName) {
             this.showToast('Required Fields', 'Please select an object first.', 'warning');
@@ -189,8 +188,6 @@ export default class DataPackObject extends OmniscriptBaseMixin(LightningElement
         var data = {
             objectList: this.objectList
         }
-        this.omniApplyCallResp(data)
-        this.omniNextStep();
     }
 
 }

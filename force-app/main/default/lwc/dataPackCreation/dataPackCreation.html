@@ -5,7 +5,8 @@
                 <lightning-layout-item flexibility="auto" padding="around-small" size="6">
                     <lightning-input label="Package Name" 
                                      onchange={handlePackName} 
-                                     value={packName}>
+                                     value={packName}
+                                     required="true">
                     </lightning-input>
                 </lightning-layout-item>
                 <lightning-layout-item flexibility="auto" padding="around-small" size="3">
@@ -22,14 +23,16 @@
                                         label="Frequency"
                                         value="frequency"
                                         options={frequencyOptions}
-                                        onchange={handleFrequency}>
+                                        onchange={handleFrequency}
+                                        required="true">
                     </lightning-combobox>
                 </lightning-layout-item>
                 <lightning-layout-item flexibility="auto" padding="around-small" size="3">
                     <lightning-input label="Schedule"
-                                     type="time" 
+                                     type="time"    
                                      onchange={handleSchedule}
-                                     value={shedule}>
+                                     value={shedule}
+                                     required="true">
                     </lightning-input>
                 </lightning-layout-item>
             </lightning-layout>

@@ -1,5 +1,4 @@
 import { LightningElement, api } from 'lwc';
-import { OmniscriptBaseMixin } from 'vlocity_cmt/omniscriptBaseMixin';
 
 export default class DataPackObjectSetup extends LightningElement {
 
@@ -8,6 +7,8 @@ export default class DataPackObjectSetup extends LightningElement {
     selectedObject;
     objectListUpdated;
     isDataPackCreation;
+    gotoObjectSetup = false;
+    packData;
 
     @api packageObject;
 
@@ -28,6 +29,14 @@ export default class DataPackObjectSetup extends LightningElement {
 
         // update object list on data pack object. 
         this.objectListUpdated = deletedObjectName;
+    }
+    
+    handleNextStep(event) {
+
+
+        const dataPackObject = event.detail;
+        this.gotoObjectSetup = dataPackObject.gotoNextStep;
+        this.packData = dataPackObject;
     }
 
 }
