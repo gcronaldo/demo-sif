@@ -1,0 +1,21 @@
+<template>
+    <template if:true={isDataPackCreation}>
+        <c-data-pack-creation></c-data-pack-creation>
+    </template>
+    <lightning-card title="Data Pack Setup" icon-name="doctype:pack">
+        <div class="slds-grid slds-wrap slds-box slds-m-horizontal_xx-small">
+            <div class="slfds-col slds-size_3-of-4 slds-border_right">
+                <c-data-Pack-Object onobjectdata={handleObjectData} 
+                                    selected-object={selectedObject}
+                                    object-list-updated={objectListUpdated}>
+                </c-data-Pack-Object>
+            </div>
+            <div class="slfds-col slds-size_1-of-4">
+                <c-data-Pack-Related-Objects onobjectselected={handleRelatedObjects} 
+                                             ondeleteobject={handleDeleteObject}
+                                             objects={relatedObjects}>
+                </c-data-Pack-Related-Objects>
+            </div>
+        </div>
+    </lightning-card>
+</template>

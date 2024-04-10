@@ -1,0 +1,88 @@
+<template>
+    <div class="c-container">
+        <!--General Setup -->
+        <lightning-card title="General" >
+            <lightning-layout multiple-rows="true" class="slds-m-left_small">
+                <lightning-layout-item size="12">
+                    <lightning-layout vertical-align="center">
+                        <lightning-layout-item padding="around-small">
+                            <lightning-input type="toggle" label="Enable Replication" onchange={handleReplication} checked={replicationSelected}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small">
+                            <lightning-input type="toggle" label="Enable Purge" onchange={handlePurge} checked={purgeSelected}></lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+                <lightning-layout-item size="12">
+                    <lightning-layout vertical-align="center">
+                        <lightning-layout-item flexibility="auto" padding="around-samll">
+                            <lightning-combobox
+                                name="objectDataInput"
+                                label="Object Name"
+                                value={objectName}
+                                placeholder="Select object"
+                                options={availableObjects}
+                                onchange={handleSelectedObject}>
+                            </lightning-combobox>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="around-small">
+                            <lightning-input type="number" label="Execution Order" onchange={handleExecutionOrder} value={executionOrder}></lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-card>
+        <!-- Data Replication Section -->
+        <template if:true={replicationSelected}>
+            <div class="slds-border_top">
+                <lightning-card title="Data Replication" class="slds-border_top">
+                    <lightning-layout vertical-align="center">
+                        <lightning-layout-item flexibility="auto" padding="around-small">
+                            <lightning-input label="Bucket Name" onchange={handleBucketName} value={bucketName}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="around-small">
+                            <lightning-input type="number" label="Screen Size Load" onchange={handleScreenSizeLoad} value={screenSizeLoad}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="around-small">
+                            <lightning-input label="Path" onchange={handlePath} value={path}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="around-small">
+                            <lightning-input label="Query Conditional" onchange={handleQueryConditional} value={queryConditional}></lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-card>
+            </div>
+        </template>
+        <!-- Purge Section -->
+        <template if:true={purgeSelected}>
+            <div class="slds-border_top">
+                <lightning-card title="Purge" >
+                    <lightning-layout vertical-align="center">
+                        <lightning-layout-item flexibility="auto" padding="around-small">
+                            <lightning-input type="number" label="Batch Size" onchange={handleBatchSize} value={batchSize}></lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="auto" padding="around-small">
+                            <lightning-input label="Query Conditional" onchange={handleQueryConditionalPurge} value={queryConditionalPurge}></lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-card>
+            </div>
+        </template>
+        <div class="slds-align_absolute-center slds-border_top">
+            <lightning-button-group>
+                <lightning-button
+                label="Add New Object"
+                onclick={addObject}
+                class="slds-m-top_x-small"
+                variant="brand">
+            </lightning-button>
+            <lightning-button
+                label="Next"
+                onclick={nextStep}
+                class="slds-m-top_x-small slds-m-left_xxx-small"
+                variant="brand">
+            </lightning-button>
+            </lightning-button-group>
+        </div>
+    </div>
+</template>

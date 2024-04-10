@@ -1,0 +1,48 @@
+<template>
+    <div class="slds-border_top">
+        <lightning-card title="Package Setup" icon-name="doctype:pack">
+            <lightning-layout vertical-align="center">
+                <lightning-layout-item flexibility="auto" padding="around-small" size="6">
+                    <lightning-input label="Package Name" 
+                                     onchange={handlePackName} 
+                                     value={packName}>
+                    </lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="around-small" size="3">
+                    <lightning-input label="Active"
+                                     type="toggle" 
+                                     onchange={handleActive} 
+                                     checked={packageActive}>
+                    </lightning-input>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout vertical-align="center">
+                <lightning-layout-item padding="around-small" size="6">
+                    <lightning-combobox name="packageFrequency"
+                                        label="Frequency"
+                                        value="frequency"
+                                        options={frequencyOptions}
+                                        onchange={handleFrequency}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+                <lightning-layout-item flexibility="auto" padding="around-small" size="3">
+                    <lightning-input label="Schedule"
+                                     type="time" 
+                                     onchange={handleSchedule}
+                                     value={shedule}>
+                    </lightning-input>
+                </lightning-layout-item>
+            </lightning-layout>
+            <div class="slds-align_absolute-center slds-border_top">
+                <lightning-button-group>
+                    <lightning-button
+                        label="Next"
+                        onclick={nextStep}
+                        class="slds-m-top_x-small slds-m-left_xxx-small"
+                        variant="brand">
+                    </lightning-button>
+                </lightning-button-group>
+            </div>
+        </lightning-card>
+    </div>
+</template>

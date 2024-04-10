@@ -1,0 +1,40 @@
+<template>
+    <lightning-card title="Related Objects" >
+        <template if:true={objects}>
+            <ul>
+                <template for:each={objects} for:item="obj">
+                    <li key={obj.objectName} class="slds-card slds-p-left_x-small">
+                        <lightning-card>
+                            <h2 slot="title">
+                                <lightning-icon icon-name="utility:standard_objects" size="small"></lightning-icon>
+                                {obj.objectName}
+                            </h2>
+                            <p class="slds-p-horizontal_small">Execution Order: {obj.executionOrder}</p>
+                            <div slot="footer">
+                                <lightning-button-icon icon-name="utility:preview" 
+                                                       size="x-small"
+                                                       title="view" 
+                                                       onclick={handleSelectedObject} 
+                                                       data-key={obj.objectName} 
+                                                       class="slds-m-horizontal_xxx-small">
+                                </lightning-button-icon>
+                                <lightning-button-icon icon-name="utility:delete" 
+                                                       size="x-small"
+                                                       title="delete"
+                                                       onclick={handleDelete}
+                                                       data-key={obj.objectName}
+                                                       class="slds-m-horizontal_xxx-small">
+                                </lightning-button-icon>
+                            </div>
+                        </lightning-card>
+                    </li>
+                </template>
+            </ul>
+        </template>
+        <template if:false={objects}>
+            <div class="slds-m-left_x-small slds-box slds-theme_shade slds-theme_alert-texture">
+                <p>There's no object selected. Please select one.</p>
+              </div>
+        </template>
+    </lightning-card>
+</template>
