@@ -2,8 +2,8 @@ import { LightningElement, api } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 export default class DataPackObject extends LightningElement {
-    replicationSelected;
-    purgeSelected;
+    replicationSelected = false;
+    purgeSelected = false;
     executionOrder;
     queryConditional;
     bucketName;

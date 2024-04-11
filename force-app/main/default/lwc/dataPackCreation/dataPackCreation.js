@@ -6,7 +6,8 @@ export default class DataPackCreation extends LightningElement {
     packName;
     packageActive;
     frequency;
-    shedule;
+    schedule;
+    packageIsActive = false;
 
     get frequencyOptions() {
         return [
@@ -29,14 +30,14 @@ export default class DataPackCreation extends LightningElement {
     }
 
     handleSchedule(event) {
-        this.shedule = event.detail.value;
+        this.schedule = event.detail.value;
     }
 
     validateInputs() {
         return (
             this.packName &&
             this.frequency &&
-            this.shedule
+            this.schedule
         );
     }
 
@@ -47,8 +48,9 @@ export default class DataPackCreation extends LightningElement {
                 packName: this.packName,
                 packageActive: this.packageActive,
                 frequency: this.frequency,
-                shedule: this.shedule,
-                gotoNextStep: true
+                schedule: this.schedule,
+                gotoNextStep: true,
+                packageIsActive : this.packageIsActive
             };
             const event = new CustomEvent('datapackcreation', { detail: packData });
             this.dispatchEvent(event);
