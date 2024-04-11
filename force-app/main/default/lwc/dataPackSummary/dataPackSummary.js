@@ -2,10 +2,15 @@ import { LightningElement, api } from 'lwc';
 
 export default class DataPackSummary extends LightningElement {
 
-    @api objects = [];
+    @api objects;
 
     handleToggleSection(event) {
         console.log('handleToggleSection'+event.detail.openSections);
+    }
+
+    saveDataPack() {
+        console.log('Enter saveDataPack');
+
     }
 
 }
