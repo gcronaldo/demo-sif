@@ -62,7 +62,8 @@ export default class DataPackObject extends LightningElement {
             { label: 'Contact', value: 'Contact' },
             { label: 'Opportunity', value: 'Opportunity' },
             { label: 'Case', value: 'Case' },
-            { label: 'Lead', value: 'Lead' }
+            { label: 'Lead', value: 'Lead' },
+            { label: 'Invoices', value: 'Invoice__c' },
         ];
     }
 

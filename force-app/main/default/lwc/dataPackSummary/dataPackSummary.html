@@ -29,8 +29,14 @@
                                                                 allow-multiple-sections-open
                                                                 onsectiontoggle={handleToggleSection}>
                                         <lightning-accordion-section name={obj.objectName} label={obj.objectName}>
-                                            <p>Object: {obj.objectName}</p>
-                                            <p>Execution Order: {obj.executionOrder}</p>
+                                            <div class="slds-p-top_x-small slds-p-left_xx-large">
+                                                <div class="slds-text-body_small">Object</div>
+                                                <div class="slds-text-heading_small">{obj.objectName}</div>
+                                            </div>
+                                            <div class="slds-p-top_x-small slds-p-left_xx-large">
+                                                <div class="slds-text-body_small">Execution Order</div>
+                                                <div class="slds-text-heading_small">{obj.executionOrder}</div>
+                                            </div>
                                             <template lwc:if={obj.replicationSelected}>
                                                 <lightning-card title="Replication Info">
                                                     <p>Query Conditional: {obj.queryConditional}</p>
@@ -40,7 +46,7 @@
                                                 </lightning-card>
                                             </template>
                                             <template lwc:if={obj.purgeSelected}>
-                                                <lightning-card title="Purge Info">
+                                                <lightning-card title="Purge Info" >
                                                     <p>batchSize: {obj.batchSize}</p>
                                                     <p>Query Conditional: {obj.queryConditionalPurge}</p>
                                                 </lightning-card>

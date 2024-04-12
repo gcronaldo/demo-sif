@@ -11,7 +11,8 @@ public with sharing class ScheduleSetupDatatime {
         // Apply the rule based on frequency.
         switch on frequency {
             when 'Daily' {
-                currentDate = currentDate.addDays(1);
+                // Correctly solution commented only to test proposal.
+                //currentDate = currentDate.addDays(1);
                 scheduledDateTime = DateTime.newInstance(currentDate, scheduleTime);
                 System.debug('Result of daily ---> '+scheduledDateTime);
             }
