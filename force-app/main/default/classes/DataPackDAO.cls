@@ -1,7 +1,7 @@
 public class DataPackDAO {
     
     //Return DataPack and DataPackObjects
-    public static DataPackObject__c retrieveDataPackageObject(String dataPackID, Integer execOrder){
+    public static DataPackObject__c retrieveDataPackageObject(String dataPackId, Integer execOrder){
         System.debug('Enter retrieveDataPackageObject --> '+ dataPackID + ' - '+execOrder);
         
         //DataPack Package and Object
@@ -25,7 +25,10 @@ public class DataPackDAO {
     
     //Retrieve Replication Payload
     public static String retrieveQueryMetadata(Id dataPackageId) {
-        DataPackage__c dataPackage = [SELECT Id, Active__c FROM DataPackage__c WHERE Id = :dataPackageId];
+        DataPackage__c dataPackage = [SELECT Id, Active__c 
+                                      FROM DataPackage__c 
+                                      WHERE Id = :dataPackageId];
+
         
         if (!dataPackage.Active__c) {
             return 'This data package is inactive!';
@@ -57,8 +60,8 @@ public class DataPackDAO {
     }
 
 
-    //Return Active scheduleJobs
-    public static List<DataPackExecution__c> retrieveExecutionJobs(ID dataPackID){
+    // Return Active execution data pack
+    public static List<DataPackExecution__c> retrieveExecutionJobs(ID dataPackId){
         List<DataPackExecution__c> lstScheduleJob =      
             [SELECT Id, Name, PackageName__c, FinishDate__c, ResultDetail__c, StartDate__c, Status__c 
              FROM DataPackExecution__c
@@ -66,6 +69,95 @@ public class DataPackDAO {
             ];
         
         return lstScheduleJob;      
-    }    
+    } 
+    
+    // Update the execution pack to purge conclusion based on package Id. 
+    public static void updateExecutionPack(Id dataPackId, Boolean isPurge) {
+
+        try{
+            DataPackExecution__c dataPackExecution = [SELECT PurgeConcluded__c, ReplicationConcluded__c
+                                                      FROM DataPackExecution__c
+                                                      WHERE PackageName__c =: dataPackId
+                                                      Limit 1];
+
+            dataPackExecution.PurgeConcluded__c = isPurge ? true : false;
+            dataPackExecution.ReplicationConcluded__c = isPurge ? false : true;
+            update as user dataPackExecution;
+        }
+        catch(Exception e) {
+            System.debug('Got error updating data pack execution: '+e.getMessage());
+        }
+    }
+
+    // Retrieve the data pack execution that is open to execute based on package Id. 
+    public static DataPackExecution__c retrieveDataPackObjects(Id dataPackId) {
+        
+        // Return the list of data pack objects from the database. 
+        DataPackExecution__c dataPackExecution = new DataPackExecution__c();
+        try {
+            dataPackExecution = [SELECT PurgeConcluded__c, ReplicationConcluded__c
+                                 FROM DataPackExecution__c
+                                 WHERE PackageName__c =: dataPackId
+                                 AND Status__c =: 'Open'
+                                 LIMIT 1];
+        } catch(Exception e) {
+            System.debug('Got error to found data pack execution. '+e.getMessage());
+        }
+
+        return dataPackExecution;
+    }
+
+    // Validate if the package has enabled purge, data replication or both. 
+    public static String validateDataPackageProcess(Id dataPackId) {
+
+        // Return of result. 
+        String result;
+
+        // Retrieve data package objects to validate which were set to purge and replication process. 
+        List<DataPackObject__c> dataPackObjects = new List<DataPackObject__c>();
+        try{
+            dataPackObjects = [SELECT PurgeActive__c, ReplicationActive__c
+                               FROM DataPackObject__c
+                               WHERE Package__c =: dataPackId];
+        } 
+        catch(Exception e){
+            System.debug('Got error retrieving data pack objects. '+e.getMessage());
+        }
+
+        // Check which process were selected. 
+        Boolean hasReplication = false;
+        Boolean hasPurge = false;
+        for(DataPackObject__c dpo: dataPackObjects) {
+            if(dpo.PurgeActive__c) {
+                hasPurge = dpo.PurgeActive__c;
+            }
+            if(dpo.ReplicationActive__c) {
+                hasReplication = dpo.ReplicationActive__c;
+            }
+        }
+        // Return the indication of full process. 
+        if(hasPurge && hasReplication) {
+            result = 'Full';
+        } 
+        else if(!hasPurge && hasReplication){
+            result = 'Replication';
+        }
+        else if(hasPurge && !hasReplication){
+            result = 'Purge';
+        }
+
+        return result;
+    }
+
+    // Update data pack execution based on object. 
+    public static void updateDataPackExecution(DataPackExecution__c dataPackExecution) {
+
+        try{
+            update as user dataPackExecution;
+        }
+        catch(Exception e) {
+            System.debug('Got error updating data pack execution: '+e.getMessage());
+        }
+    }
     
 }

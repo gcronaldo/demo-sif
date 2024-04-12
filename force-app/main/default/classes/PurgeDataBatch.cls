@@ -28,7 +28,6 @@ public without sharing class PurgeDataBatch implements Database.Batchable<SObjec
 
     public void finish(Database.BatchableContext bc) {
         scheduleNextJob();
-        notifyUser();
     }
 
     private void scheduleNextJob() {
@@ -42,7 +41,9 @@ public without sharing class PurgeDataBatch implements Database.Batchable<SObjec
         //Check if object is empty
         //Get package and the next object from same package
         if (nextDataPack.Package__c == null){
-            System.debug('Expected at least one Package for execution');            
+            System.debug('Expected at least one Package for execution');  
+            updateExecutionPack();  
+            notifyUser();        
         } else{
             String jobName = 'JOB_'+nextDataPack.Package__r.Name+'_'+nextDataPack.ObjectName__c;
             PurgeDataBatch job = new PurgeDataBatch(jobName,nextDataPack.PurgeQueryConditional__c,Integer.valueOf(nextDataPack.ExecutionOrder__c),Integer.valueOf(nextDataPack.BatchSize__c),nextDataPack.Package__c);
@@ -60,6 +61,10 @@ public without sharing class PurgeDataBatch implements Database.Batchable<SObjec
         String dummyId = '000000000000000AAA';
         String bodyMsg = this.jobName + ' completed.';
         CustomNotificationFromApex.notifyUsers(recipients, dummyId, this.jobName, bodyMsg);
+    }
+
+    private void updateExecutionPack() {
+        DataPackDAO.updateExecutionPack(this.dataPackID, true);
     }
     
 }

@@ -11,7 +11,18 @@ public class DataPackController {
 
         if(dataPackIds.size() > 0){
             System.debug('Retrieved id --> '+dataPackIds[0]);
-            purgeData(dataPackIds[0]);
+            String typeProcess = setPackProcessStatus(dataPackIds[0]);
+            if(typeProcess == 'Full') {
+                purgeData(dataPackIds[0]);
+            }
+            else if(typeProcess == 'Purge'){
+                purgeData(dataPackIds[0]);
+            } 
+            else {
+                // Will call apex callout. 
+            }
+
+            
         }
         else {
             System.debug('No records found!');
@@ -39,4 +50,30 @@ public class DataPackController {
             Database.executeBatch(job, Integer.valueOf(dataPack.BatchSize__c));
         }
     }  
+
+    // Check if the package execution is to apply a full or partion process. 
+    public static String setPackProcessStatus(Id dataPackID){
+
+        // Result. 
+        Boolean result;
+
+        // Retrieve the data pack execution to be updated. 
+        DataPackExecution__c dpe = DataPackDAO.retrieveDataPackObjects(dataPackID);
+        
+        // Get the type of process to update the status on data pack execution.  
+        String typeProcess = DataPackDAO.validateDataPackageProcess(dataPackID);
+
+        // Set the return based on type of data pack. 
+        if(typeProcess == 'Full') {
+            dpe.Status__c = 'Full';
+        }
+        else {
+            dpe.Status__c = 'Partial';
+        }
+
+        // Apply the changes to data pack execution
+        DataPackDAO.updateDataPackExecution(dpe);
+        
+        return typeProcess;
+    }
 }
