@@ -64,7 +64,7 @@ public without sharing class PurgeDataBatch implements Database.Batchable<SObjec
     }
 
     private void updateExecutionPack() {
-        DataPackDAO.updateExecutionPack(this.dataPackID, true);
+        DataPackController.concludePurgeProcess(this.dataPackID);
     }
     
 }

@@ -8,18 +8,17 @@ public class DataPackDAO {
         DataPackObject__c dataPackInfo = new DataPackObject__c();
         try{
             dataPackInfo = [SELECT Package__r.Name,Package__c,ObjectName__c, BatchSize__c,PurgeQueryConditional__c,ExecutionOrder__c
-                                              FROM DataPackObject__c
-                                              WHERE Package__c= :dataPackID 
-                                              AND Package__r.Active__c = true 
-                                              AND PurgeActive__c = true 
-                                              AND ExecutionOrder__c =:execOrder
-                                              LIMIT 1
+                            FROM DataPackObject__c
+                            WHERE Package__c= :dataPackID 
+                            AND Package__r.Active__c = true 
+                            AND PurgeActive__c = true 
+                            AND ExecutionOrder__c =:execOrder
+                            LIMIT 1
             ];
         } catch(QueryException e) {
             System.debug('Has no record found to data pack info. '+e.getMessage());
         }
         
-        System.debug('Return of list ------> '+dataPackInfo);
         return dataPackInfo;
     }
     
@@ -61,7 +60,7 @@ public class DataPackDAO {
 
 
     // Return Active execution data pack
-    public static List<DataPackExecution__c> retrieveExecutionJobs(ID dataPackId){
+    public static List<DataPackExecution__c> retrieveExecutionJobs(Id dataPackId){
         List<DataPackExecution__c> lstScheduleJob =      
             [SELECT Id, Name, PackageName__c, FinishDate__c, ResultDetail__c, StartDate__c, Status__c 
              FROM DataPackExecution__c
@@ -90,7 +89,7 @@ public class DataPackDAO {
     }
 
     // Retrieve the data pack execution that is open to execute based on package Id. 
-    public static DataPackExecution__c retrieveDataPackObjects(Id dataPackId) {
+    public static DataPackExecution__c retrieveOpenDataPackExecution(Id dataPackId) {
         
         // Return the list of data pack objects from the database. 
         DataPackExecution__c dataPackExecution = new DataPackExecution__c();
@@ -99,6 +98,24 @@ public class DataPackDAO {
                                  FROM DataPackExecution__c
                                  WHERE PackageName__c =: dataPackId
                                  AND Status__c =: 'Open'
+                                 LIMIT 1];
+        } catch(Exception e) {
+            System.debug('Got error to found data pack execution. '+e.getMessage());
+        }
+
+        return dataPackExecution;
+    }
+
+    // Retrieve the data pack execution that is under execution based on package Id. 
+    public static DataPackExecution__c retrieveInProgressDataPackExceution(Id dataPackId) {
+        
+        // Return the list of data pack objects from the database. 
+        DataPackExecution__c dataPackExecution = new DataPackExecution__c();
+        try {
+            dataPackExecution = [SELECT Name, Status__c, PurgeConcluded__c, ReplicationConcluded__c, PackageName__c, StartDate__c
+                                 FROM DataPackExecution__c
+                                 WHERE PackageName__c =: dataPackId
+                                 AND Status__c IN ('Full', 'Purge', 'Replication')
                                  LIMIT 1];
         } catch(Exception e) {
             System.debug('Got error to found data pack execution. '+e.getMessage());
@@ -154,6 +171,34 @@ public class DataPackDAO {
 
         try{
             update as user dataPackExecution;
+        }
+        catch(Exception e) {
+            System.debug('Got error updating data pack execution: '+e.getMessage());
+        }
+    }
+
+    // Retrieve the data package info based on it's Id. 
+    public static DataPackage__c retrieveDataPackage(Id dataPackId) {
+
+        // Return the data package from the database. 
+        DataPackage__c dataPackage = new DataPackage__c();
+        try {
+            dataPackage = [SELECT Frequency__c
+                           FROM DataPackage__c
+                           WHERE Id =: dataPackId
+                           LIMIT 1];
+        } catch(Exception e) {
+            System.debug('Got error to found data pack execution. '+e.getMessage());
+        }
+
+        return dataPackage;
+    }
+ 
+    // Create data pack execution based on object. 
+    public static void createDataPackExecution(DataPackExecution__c dataPackExecution) {
+
+        try{
+            insert as user dataPackExecution;
         }
         catch(Exception e) {
             System.debug('Got error updating data pack execution: '+e.getMessage());

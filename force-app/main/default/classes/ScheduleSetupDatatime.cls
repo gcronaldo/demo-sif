@@ -12,7 +12,7 @@ public with sharing class ScheduleSetupDatatime {
         switch on frequency {
             when 'Daily' {
                 // Correctly solution commented only to test proposal.
-                //currentDate = currentDate.addDays(1);
+                currentDate = currentDate.addDays(1);
                 scheduledDateTime = DateTime.newInstance(currentDate, scheduleTime);
                 System.debug('Result of daily ---> '+scheduledDateTime);
             }

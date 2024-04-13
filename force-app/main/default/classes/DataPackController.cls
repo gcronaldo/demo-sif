@@ -7,7 +7,6 @@ public class DataPackController {
     // Expose the execution call to flow and IPs. 
     @invocableMethod(label='Execute Data Pack Process' description='Execute the data pack process through flow passing execution process Id, enable the process to call the purge and replication process.')
     public static List<Id> executeDataPackProcess(List<Id> dataPackIds) {
-        System.debug('Enter executeDataPackProcess');
 
         if(dataPackIds.size() > 0){
             System.debug('Retrieved id --> '+dataPackIds[0]);
@@ -20,9 +19,7 @@ public class DataPackController {
             } 
             else {
                 // Will call apex callout. 
-            }
-
-            
+            }  
         }
         else {
             System.debug('No records found!');
@@ -31,7 +28,7 @@ public class DataPackController {
         return dataPackIds;
     }
     
-
+    // Execute the purge data process to the setup data pack objects. 
     public static void purgeData(String dataPackID){
 
         //Define Execution Order
@@ -58,22 +55,57 @@ public class DataPackController {
         Boolean result;
 
         // Retrieve the data pack execution to be updated. 
-        DataPackExecution__c dpe = DataPackDAO.retrieveDataPackObjects(dataPackID);
+        DataPackExecution__c dpe = DataPackDAO.retrieveOpenDataPackExecution(dataPackID);
         
         // Get the type of process to update the status on data pack execution.  
-        String typeProcess = DataPackDAO.validateDataPackageProcess(dataPackID);
-
-        // Set the return based on type of data pack. 
-        if(typeProcess == 'Full') {
-            dpe.Status__c = 'Full';
-        }
-        else {
-            dpe.Status__c = 'Partial';
-        }
+        dpe.Status__c = DataPackDAO.validateDataPackageProcess(dataPackID);
 
         // Apply the changes to data pack execution
         DataPackDAO.updateDataPackExecution(dpe);
-        
-        return typeProcess;
+
+        return dpe.Status__c;
     }
+
+    // Check the data pack type process closing the current one and scheduling the next one. 
+    public static void concludePurgeProcess(Id dataPackID) {
+
+        // Retrieve current data pack execution. 
+        DataPackExecution__c dpe = DataPackDAO.retrieveInProgressDataPackExceution(dataPackID);
+
+        // Check the type process execution to determine the update settings. 
+        if(dpe.Status__c == 'Purge') {
+            dpe.PurgeConcluded__c = true;
+            dpe.Status__c = 'Success';
+        }
+        else {
+            dpe.PurgeConcluded__c = true;
+        }
+
+        // Update the data pack execution. 
+        DataPackDAO.updateDataPackExecution(dpe);
+
+        // Create the next schedule execution. 
+        createNextScheduleExecution(dpe);
+
+    } 
+
+    // Create next schedule execution. 
+    public static void createNextScheduleExecution(DataPackExecution__c dataPackExecution) {
+
+        // Prepare next schedule. 
+        DataPackage__c dataPackage = DataPackDAO.retrieveDataPackage(dataPackExecution.PackageName__c);
+        Time timeValue = Time.newInstance(dataPackExecution.StartDate__c.hour(), 
+                                          dataPackExecution.StartDate__c.minute(), 
+                                          dataPackExecution.StartDate__c.second(),
+                                          0); 
+        DataPackExecution__c dpe = new DataPackExecution__c();
+        dpe.Name = dataPackExecution.Name;
+        dpe.PackageName__c = dataPackExecution.PackageName__c;
+        dpe.StartDate__c = ScheduleSetupDatatime.createScheduleDatetime(timeValue, dataPackage.Frequency__c);
+
+        // Create next schedule. 
+        DataPackDAO.createDataPackExecution(dpe);
+
+    }
+
 }

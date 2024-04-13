@@ -61,7 +61,10 @@ public with sharing class DataPackSetupController {
         DataPackExecution__c dpe = new DataPackExecution__c();
         dpe.Name = dp.Name;
         dpe.PackageName__c = dp.Id;
-        dpe.StartDate__c = ScheduleSetupDatatime.createScheduleDatetime(dp.Schedule__c, dp.Frequency__c);
+        // Provisory date only for test proposal. This should be removed further. 
+        DateTime dt = ScheduleSetupDatatime.createScheduleDatetime(dp.Schedule__c, dp.Frequency__c);
+        DateTime decreasedDateTime = dt.addDays(-1);
+        dpe.StartDate__c = decreasedDateTime;
 
         try {
             insert as user dpe;
