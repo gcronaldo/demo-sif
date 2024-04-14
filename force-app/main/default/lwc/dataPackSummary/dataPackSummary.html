@@ -25,31 +25,69 @@
                             <ul>
                                 <template for:each={objects.objects} for:item="obj">
                                     <li key={obj.objectName} >
-                                        <lightning-accordion active-section-name={obj.objectName}
+                                        <lightning-accordion active-section-name=""
                                                                 allow-multiple-sections-open
                                                                 onsectiontoggle={handleToggleSection}>
                                         <lightning-accordion-section name={obj.objectName} label={obj.objectName}>
-                                            <div class="slds-p-top_x-small slds-p-left_xx-large">
-                                                <div class="slds-text-body_small">Object</div>
-                                                <div class="slds-text-heading_small">{obj.objectName}</div>
-                                            </div>
-                                            <div class="slds-p-top_x-small slds-p-left_xx-large">
-                                                <div class="slds-text-body_small">Execution Order</div>
-                                                <div class="slds-text-heading_small">{obj.executionOrder}</div>
-                                            </div>
+                                            <lightning-layout>
+                                                <lightning-layout-item padding="around-small">
+                                                    <div class="header-column">
+                                                        <p class="field-title" title="Field 1">Object</p>
+                                                        <p>{obj.objectName}</p>
+                                                    </div>
+                                                </lightning-layout-item>
+                                                <lightning-layout-item padding="around-small">
+                                                    <div class="header-column">
+                                                        <p class="field-title" title="Field 1">Execution Order</p>
+                                                        <p>{obj.executionOrder}</p>
+                                                    </div>
+                                                </lightning-layout-item>
+                                            </lightning-layout>
                                             <template lwc:if={obj.replicationSelected}>
-                                                <lightning-card title="Replication Info">
-                                                    <p>Query Conditional: {obj.queryConditional}</p>
-                                                    <p>Bucket Name: {obj.bucketName}</p>
-                                                    <p>Screen Size Load: {obj.screenSizeLoad}</p>
-                                                    <p>Path: {obj.path}</p>
-                                                </lightning-card>
+                                                <lightning-layout class="slds-border_top">
+                                                    <div class="slds-text-title">Replication Setup</div>
+                                                    <lightning-layout-item padding="around-small">
+                                                        <div class="header-column">
+                                                            <p class="field-title" title="Query Conditional">Query Conditional</p>
+                                                            <p>{obj.queryConditional}</p>
+                                                        </div>
+                                                    </lightning-layout-item>
+                                                    <lightning-layout-item padding="around-small">
+                                                        <div class="header-column">
+                                                            <p class="field-title" title="Bucket Name">Bucket Name</p>
+                                                            <p>{obj.bucketName}</p>
+                                                        </div>
+                                                    </lightning-layout-item>
+                                                    <lightning-layout-item padding="around-small">
+                                                        <div class="header-column">
+                                                            <p class="field-title" title="Screen Size Load">Screen Size Load</p>
+                                                            <p>{obj.screenSizeLoad}</p>
+                                                        </div>
+                                                    </lightning-layout-item>
+                                                    <lightning-layout-item padding="around-small">
+                                                        <div class="header-column">
+                                                            <p class="field-title" title="Path">Path</p>
+                                                            <p>{obj.path}</p>
+                                                        </div>
+                                                    </lightning-layout-item>
+                                                </lightning-layout>
                                             </template>
                                             <template lwc:if={obj.purgeSelected}>
-                                                <lightning-card title="Purge Info" >
-                                                    <p>batchSize: {obj.batchSize}</p>
-                                                    <p>Query Conditional: {obj.queryConditionalPurge}</p>
-                                                </lightning-card>
+                                                <lightning-layout class="slds-border_top">
+                                                    <div class="slds-text-title">Purge Setup</div>
+                                                    <lightning-layout-item padding="around-small">
+                                                        <div class="header-column">
+                                                            <p class="field-title" title="Batch Size">Batch Size</p>
+                                                            <p>{obj.batchSize}</p>
+                                                        </div>
+                                                    </lightning-layout-item>
+                                                    <lightning-layout-item padding="around-small">
+                                                        <div class="header-column">
+                                                            <p class="field-title" title="Query Conditional">Query Conditional</p>
+                                                            <p>{obj.queryConditionalPurge}</p>
+                                                        </div>
+                                                    </lightning-layout-item>
+                                                </lightning-layout>
                                             </template>
                                         </lightning-accordion-section>
                                     </lightning-accordion>

@@ -28,6 +28,7 @@ public without sharing class PurgeDataBatch implements Database.Batchable<SObjec
 
     public void finish(Database.BatchableContext bc) {
         scheduleNextJob();
+        notifyUser();
     }
 
     private void scheduleNextJob() {
@@ -43,7 +44,7 @@ public without sharing class PurgeDataBatch implements Database.Batchable<SObjec
         if (nextDataPack.Package__c == null){
             System.debug('Expected at least one Package for execution');  
             updateExecutionPack();  
-            notifyUser();        
+                    
         } else{
             String jobName = 'JOB_'+nextDataPack.Package__r.Name+'_'+nextDataPack.ObjectName__c;
             PurgeDataBatch job = new PurgeDataBatch(jobName,nextDataPack.PurgeQueryConditional__c,Integer.valueOf(nextDataPack.ExecutionOrder__c),Integer.valueOf(nextDataPack.BatchSize__c),nextDataPack.Package__c);
