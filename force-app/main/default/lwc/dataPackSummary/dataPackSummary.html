@@ -1,23 +1,31 @@
 <template>
     <div class="c-container">
+        <template lwc:if={showSpinner}>
+            <lightning-spinner alternative-text="Loading" size="large" class="slds-align_absolute-center slds-border_top spinnerHolder"></lightning-spinner>
+        </template>
         <lightning-card title="Data Pack Summary" icon-name="doctype:pack">
             <lightning-layout multiple-rows="true" class="slds-m-left_small">
                 <lightning-layout-item size="12" class="lgc-bg">
-                    <div class="slds-p-top_x-small slds-p-left_small">
-                        <div class="slds-text-body_small">Package Name</div>
-                        <div class="slds-text-heading_small">{objects.packData.packName}</div>
-                    </div>
-                    <div class="slds-p-top_x-small slds-p-left_small">
-                        <div class="slds-text-body_small">Frequency</div>
-                        <div class="slds-text-heading_small">{objects.packData.frequency}</div>
-                    </div>
-                    <div class="slds-p-top_x-small slds-p-left_small slds-p-bottom_small">
-                        <div class="slds-text-body_small">Schedule</div>
-                        <div class="slds-text-heading_small">
-                            <lightning-formatted-time value={objects.packData.schedule}>
-                            </lightning-formatted-time>
-                        </div>
-                    </div>
+                    <lightning-layout>
+                        <lightning-layout-item padding="around-small">
+                            <div class="header-column">
+                                <p class="field-title" title="Package Name">Package Name</p>
+                                <p>{objects.packData.packName}</p>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small">
+                            <div class="header-column">
+                                <p class="field-title" title="Frequency">Frequency</p>
+                                <p>{objects.packData.frequency}</p>
+                            </div>
+                        </lightning-layout-item>
+                        <lightning-layout-item padding="around-small">
+                            <div class="header-column">
+                                <p class="field-title" title="Schedule">Schedule</p>
+                                <p>{objects.packData.schedule}</p>
+                            </div>
+                        </lightning-layout-item>
+                    </lightning-layout>
                 </lightning-layout-item>
                 <lightning-layout-item size="12">
                     <lightning-layout vertical-align="center">
@@ -29,7 +37,8 @@
                                                                 allow-multiple-sections-open
                                                                 onsectiontoggle={handleToggleSection}>
                                         <lightning-accordion-section name={obj.objectName} label={obj.objectName}>
-                                            <lightning-layout>
+                                            <lightning-layout class="slds-border_top">
+                                                <div class="slds-text-title">Object Setup</div>
                                                 <lightning-layout-item padding="around-small">
                                                     <div class="header-column">
                                                         <p class="field-title" title="Field 1">Object</p>
