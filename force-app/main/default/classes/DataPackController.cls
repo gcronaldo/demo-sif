@@ -13,12 +13,13 @@ public class DataPackController {
             String typeProcess = setPackProcessStatus(dataPackIds[0]);
             if(typeProcess == 'Full') {
                 purgeData(dataPackIds[0]);
+                executeReplication(dataPackIds[0]);
             }
             else if(typeProcess == 'Purge'){
                 purgeData(dataPackIds[0]);
             } 
             else {
-                // Will call apex callout. 
+                executeReplication(dataPackIds[0]);
             }  
         }
         else {
@@ -26,6 +27,21 @@ public class DataPackController {
         }
 
         return dataPackIds;
+    }
+
+    // Exetute the replication process. 
+    public static void executeReplication(Id dataPackID) {
+
+        // Retrieve the execution pack to be send. 
+        DataPackExecution__c dpe = DataPackDAO.retrieveInProgressDataPackExceution(dataPackID);
+
+        // Prepare the payload to be send. 
+        String payload = DataPackDAO.retrieveQueryMetadata(dataPackID);
+        String executionId = dpe.Id;
+        String stateMachineArn = 'arn:aws:states:us-east-2:184818356592:stateMachine:MyStateMachine-eyc5f4yyd';
+
+        // Make callout to the step function. 
+        DataPackCallout.executeReplicationCallout(payload, executionId, stateMachineArn);
     }
     
     // Execute the purge data process to the setup data pack objects. 

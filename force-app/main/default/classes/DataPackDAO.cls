@@ -33,11 +33,10 @@ public class DataPackDAO {
             return 'This data package is inactive!';
         }
         
-        List<DataPackObject__c> dataPackObjects = [
-            SELECT Id, ObjectAPIName__c, ReplicationQueryConditional__c, BucketName__c, ExecutionOrder__c, Path__c, BatchSize__c
-            FROM DataPackObject__c
-            WHERE Package__c = :dataPackageId AND ReplicationActive__c = True
-            ORDER BY ExecutionOrder__c
+        List<DataPackObject__c> dataPackObjects = [SELECT Id, ObjectAPIName__c, ReplicationQueryConditional__c, BucketName__c, ExecutionOrder__c, Path__c, BatchSize__c
+                                                   FROM DataPackObject__c
+                                                   WHERE Package__c = :dataPackageId AND ReplicationActive__c = True
+                                                   ORDER BY ExecutionOrder__c
         ];
 
         List<ReplicationPayloadBuilder.ReplicationPayload> payloads = new List<ReplicationPayloadBuilder.ReplicationPayload>();

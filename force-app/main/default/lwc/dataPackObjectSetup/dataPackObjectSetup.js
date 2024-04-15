@@ -52,4 +52,10 @@ export default class DataPackObjectSetup extends LightningElement {
         this.objectListUpdated = data;
     }
 
+    handleClosed(event) {
+        console.log('Enter handleClosed --> '+JSON.stringify(event));
+        this.gotoObjectSetup = false;
+        this.gotoSummary = false;
+    }
+
 }

@@ -21,6 +21,7 @@ export default class DataPackSummary extends LightningElement {
                 console.log('Records saved successfully --> '+JSON.stringify(result));
                 this.showToast('Success', 'Data Pack saved successfully', 'success');
                 this.showSpinner = false;
+                this.closeSummary();
             })
             .catch(error => {
                 console.log('Got error --> '+JSON.stringify(error));
@@ -38,6 +39,12 @@ export default class DataPackSummary extends LightningElement {
         });
         this.dispatchEvent(toastEvent);
         
+    }
+
+    closeSummary() {
+        console.log('Enter closeSummary');
+        const event = new CustomEvent('closed', { detail: true });
+        this.dispatchEvent(event);
     }
 
 
