@@ -4,8 +4,15 @@
     <isExposed>true</isExposed>
     <masterLabel>Data Pack Object Setup</masterLabel>
     <targets>
+        <target>lightning__AppPage</target>
         <target>lightning__Tab</target>
         <target>lightning__HomePage</target>
         <target>lightning__RecordPage</target>
+        <target>lightning__RecordAction</target>
     </targets>
+    <targetConfigs>
+        <targetConfig targets="lightning__RecordAction">
+            <actionType>ScreenAction</actionType>
+        </targetConfig>
+    </targetConfigs>
 </LightningComponentBundle>

@@ -11,15 +11,26 @@ public class DataPackController {
         if(dataPackIds.size() > 0){
             System.debug('Retrieved id --> '+dataPackIds[0]);
             String typeProcess = setPackProcessStatus(dataPackIds[0]);
+            System.debug('Value of type process ----> '+typeProcess);
             if(typeProcess == 'Full') {
+                System.debug('Full ----> '+typeProcess);
                 purgeData(dataPackIds[0]);
                 executeReplication(dataPackIds[0]);
             }
             else if(typeProcess == 'Purge'){
+                System.debug('Purge ----> '+typeProcess);
                 purgeData(dataPackIds[0]);
             } 
-            else {
+            else if(typeProcess == 'Replication'){
+                System.debug('Replication ----> '+typeProcess);
                 executeReplication(dataPackIds[0]);
+            }
+            else {
+                // Retrieve current data pack execution. 
+                DataPackExecution__c dpe = DataPackDAO.retrieveInProgressDataPackExceution(dataPackIds[0]);
+
+                // Create the next execution based on package setup. 
+                createNextScheduleExecution(dpe);
             }  
         }
         else {
