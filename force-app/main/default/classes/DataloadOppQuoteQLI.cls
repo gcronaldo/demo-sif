@@ -22,23 +22,22 @@ public with sharing class DataloadOppQuoteQLI implements Database.Batchable<Inte
     public void execute(Database.BatchableContext context, List<Integer> scope) {
 
         List<QuoteStaging__c> quotesStaging = [SELECT Name, Account__c, Stage__c, CloseDate__c
-                                               FROM     
+                                               FROM QuoteStaging__c    
                                                LIMIT :scope.size()];
 
         List<Opportunity> opportunities = new List<Opportunity>();
         List<String> quotesStagingIds = new List<String>();
         for(QuoteStaging__c qs : quotesStaging) {
             Opportunity opp = new Opportunity();
-            opp.Account = qs.Account__c;
+            opp.AccountId = qs.Account__c;
             opp.CloseDate = qs.CloseDate__c;
             String opportunityName = qs.Name;
             opportunityName = opportunityName.replace('Quote', 'Opportunity');
             opp.Name = qs.Name;
-            opp.stage = qs.Stage__c;
+            opp.StageName = qs.Stage__c;
             quotesStagingIds.add(qs.Id);
             opportunities.add(opp);
         }
-
         insert opportunities;
 
         List<Quote> quotes = new List<Quote>();
@@ -84,8 +83,8 @@ public with sharing class DataloadOppQuoteQLI implements Database.Batchable<Inte
     public void finish(Database.BatchableContext context) {
         Integer currentQuantity = (Integer)Cache.Org.get('DataloadScript');
         if (currentQuantity < quantity && currentQuantity != 0) {
-            //DataloadOppQuoteQLI nextBatch = new DataloadOppQuoteQLI(currentQuantity);
-            //Database.executeBatch(nextBatch);
+            DataloadOppQuoteQLI nextBatch = new DataloadOppQuoteQLI(currentQuantity);
+            Database.executeBatch(nextBatch);
         } else {
             System.debug('Batch execution completed.');
         }

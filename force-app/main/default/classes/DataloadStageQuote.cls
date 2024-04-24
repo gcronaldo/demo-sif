@@ -5,7 +5,6 @@
 public with sharing class DataloadStageQuote implements Database.Batchable<Integer> {
     
     private Integer quantity;
-    private Integer processedRecords = 0;
 
     public DataloadStageQuote(Integer quantity) {
         Cache.Org.put('DataloadScript', quantity);
@@ -14,7 +13,6 @@ public with sharing class DataloadStageQuote implements Database.Batchable<Integ
 
     public Iterable<Integer> start(Database.BatchableContext context) {
         List<Integer> numbers = new List<Integer>();
-        System.debug('start Value of quantity ---> '+quantity);
         for (Integer i = 0; i < Math.min(quantity, 2000); i++) {
             numbers.add(i);
         }
