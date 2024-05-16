@@ -20,16 +20,19 @@ public with sharing class DataloadStageQuote implements Database.Batchable<Integ
     }
 
     public void execute(Database.BatchableContext context, List<Integer> scope) {
-
         List<QuoteStaging__c> quotesStaging  = new List<QuoteStaging__c>();
         List<Account> accounts = [SELECT Id FROM Account LIMIT 50000];
         Integer countedRecords = 0;
         for (Integer i : scope) {
             QuoteStaging__c qs = new QuoteStaging__c();
+            String quoteName = 'Pseudo Quote ' + i;
             qs.Name = 'Pseudo Quote ' + i;
             qs.Account__c = accounts.get(countedRecords).Id;
             qs.Stage__c = 'Needs Analysis';
-            qs.CloseDate__c = System.today();
+            qs.CloseDate__c = System.today();   
+            UUID randomUuid = UUID.randomUUID();
+            qs.SourceExternalKey__c = quoteName+randomUUID.toString();
+
             quotesStaging.add(qs);
             countedRecords += 1;
         }
@@ -44,6 +47,8 @@ public with sharing class DataloadStageQuote implements Database.Batchable<Integ
             qds.Quantity__c = 1;
             qds.Quote_Staging__c = qs.Id;
             qds.UnitPrice__c = 0.0;
+            UUID randomUuidqds = UUID.randomUUID();
+            qds.SourceExternalKey__c = randomUuidqds.toString();
             quotesDetails.add(qds);
         }
 
