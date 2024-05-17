@@ -1,0 +1,25 @@
+<template>
+    <lightning-card title="Inderect Account Relationships" icon-name="standard:account_info">
+        <lightning-layout horizontal-align="center">
+            <lightning-layout-item padding="around-small">
+                <template lwc:if={hasData}>
+                    <lightning-datatable
+                        key-field="Id"
+                        data={records}
+                        columns={columns}
+                        hide-checkbox-column="true"
+                        resize-column-disabled>
+                    </lightning-datatable>
+                </template>
+                <template if:false={hasData}>
+                    <c-lwc-labs-empty-state 
+                        size="small" 
+                        illustration="road" 
+                        header="No results found"
+                        description="Ops! ;-( There's no related accounts...">
+                    </c-lwc-labs-empty-state>
+                </template>
+            </lightning-layout-item>
+        </lightning-layout>
+    </lightning-card>
+</template>
