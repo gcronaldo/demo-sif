@@ -1,10 +1,10 @@
 import { LightningElement, wire, api } from 'lwc';
 import getRelatedAccounts from '@salesforce/apex/RelatedAccountsController.getRelatedAccounts';
-import ACCOUNT_NAME from '@salesforce/schema/AccountContactRelation.AccountId';
-import ROLE from '@salesforce/schema/AccountContactRelation.Roles';
 
 const COLUMNS = [
-    { label: 'Account', fieldName:'Account' },
+    { label: 'Related Account', fieldName:'Account' },
+    { label: 'Source Account', fieldName:'SourceAccount' },
+    { label: 'Contact', fieldName:'Contact' },
     { label: 'Role', fieldName:'Role' }
 ];
 
@@ -28,8 +28,9 @@ export default class InderectAccountRelationships extends LightningElement {
                 let parsedAccount = {};
                 parsedAccount.Id = record.Id;
                 parsedAccount.Account = record.Account.Name;
+                parsedAccount.SourceAccount = record.Contact.Account.Name;
+                parsedAccount.Contact = record.Contact.Name;
                 parsedAccount.Role = record.Roles;
-                console.log('--> '+JSON.stringify(parsedAccount));
                 parsedAccounts.push(parsedAccount);
             });
             this.records = parsedAccounts;

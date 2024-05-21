@@ -14,14 +14,37 @@ public with sharing class RelatedAccountsController {
                         WHERE AccountId =: accountId
                         WITH SECURITY_ENFORCED]){
             contactIds.add(c.Id);
-        }
+        }   
         system.debug('->> '+contactIds);
 
-        List<AccountContactRelation> relatedAccounts = [SELECT AccountId, Account.Name, ContactId, Roles 
-                                                        FROM AccountContactRelation 
-                                                        WHERE ContactId IN: contactIds
-                                                        AND AccountId !=: accountId
-                                                        WITH SECURITY_ENFORCED];
+        List<AccountContactRelation> relatedAccounts = new List<AccountContactRelation>();
+        relatedAccounts.addAll([SELECT AccountId, Account.Name, ContactId, Contact.Name, Contact.Account.Name, Roles 
+                                FROM AccountContactRelation 
+                                WHERE ContactId IN :contactIds
+                                AND IsDirect = false
+                                WITH SECURITY_ENFORCED]);
+
+        relatedAccounts.addAll([SELECT AccountId, Account.Name, ContactId, Contact.Name, Contact.Account.Name, Roles 
+                                FROM AccountContactRelation 
+                                WHERE AccountId = :accountId
+                                AND IsDirect = false
+                                WITH SECURITY_ENFORCED]);
+        
+        if(contactIds.isEmpty()){
+            for(AccountContactRelation acr: [SELECT AccountId, Account.Name, ContactId, Contact.Name, Contact.Account.Name, Roles
+                                             FROM AccountContactRelation 
+                                             WHERE AccountId = :accountId
+                                             AND IsDirect = false
+                                             WITH SECURITY_ENFORCED]){
+                contactIds.add(acr.ContactId);
+            }
+            relatedAccounts.addAll([SELECT AccountId, Account.Name, ContactId, Contact.Name, Contact.Account.Name, Roles
+                                    FROM AccountContactRelation 
+                                    WHERE ContactId IN :contactIds
+                                    AND AccountId != :accountId
+                                    WITH SECURITY_ENFORCED]);
+        }
+        
 
         system.debug('----> '+relatedAccounts);
         return relatedAccounts;

@@ -2,7 +2,6 @@ import { LightningElement, api } from 'lwc';
 
 export default class CorporateHeadquarters extends LightningElement {
 
-    // Expose attributes to handles values as inputs and not hardcoded. 
     @api city;
     @api country;
     @api postalCode;
@@ -13,9 +12,7 @@ export default class CorporateHeadquarters extends LightningElement {
     @api description;
     @api icon;
 
-    // Set the map markers value. 
     get mapMarkers() {
-        // Compute mapMarkers array dynamically based on attribute values
         return [{
             location: {
                 City: this.city,

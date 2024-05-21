@@ -1,0 +1,28 @@
+<template>
+    <lightning-card>
+        <lightning-modal-header label={config.MasterLabel}></lightning-modal-header>
+        <lightning-modal-body>
+            <template if:true={isEdit}>
+                <lightning-record-edit-form 
+                    object-api-name={config.Object__c}
+                    record-id={recordId}
+                    onsuccess={handleSuccess}>
+                    <lightning-input-field field-name={config.Field__c}></lightning-input-field>
+                </lightning-record-edit-form>
+            </template>
+            <template if:true={isView}>
+                <lightning-record-view-form 
+                    object-api-name={config.Object__c}
+                    record-id={recordId}>
+                    <lightning-output-field field-name={config.Field__c}></lightning-output-field>
+                </lightning-record-view-form>
+            </template>
+        </lightning-modal-body>
+        <lightning-modal-footer>
+            <template if:true={isEdit}>
+                <lightning-button label="Submit" onclick={handleSubmit} class="slds-p-right_medium"></lightning-button>
+            </template>
+            <lightning-button label="Close" onclick={handleClose}></lightning-button>
+        </lightning-modal-footer>
+    </lightning-card>
+</template>

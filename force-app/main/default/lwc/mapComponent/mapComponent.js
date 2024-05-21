@@ -33,18 +33,21 @@ export default class MapComponent extends LightningElement {
         if (this.account.data) {
             const countriesJSON = getFieldValue(this.account.data, COUNTRIES_FIELD);
             const countries = JSON.parse(countriesJSON);
-            return countries.map(location => ({
-                location: {
-                    City: location.location.City,
-                    Country: location.location.Country,
-                    PostalCode: location.location.PostalCode,
-                    State: location.location.State,
-                    Street: location.location.Street
-                },
-                title: location.title,
-                description: location.description,
-                icon: location.icon
-            }));
+            if(countries != null){
+                return countries.map(location => ({
+                    location: {
+                        City: location.location.City,
+                        Country: location.location.Country,
+                        PostalCode: location.location.PostalCode,
+                        State: location.location.State,
+                        Street: location.location.Street
+                    },
+                    title: location.title,
+                    description: location.description,
+                    icon: location.icon
+                }));
+            }
+            
         } else {
             return [];
         }
